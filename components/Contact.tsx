@@ -12,7 +12,7 @@ export default function Contact() {
         <aside className="self-start border-t border-ink pt-6 lg:col-span-4 lg:col-start-9">
           <h3 className="font-mono text-xs uppercase text-ink/50">Prefere falar direto?</h3>
           <dl className="mt-6 space-y-6">
-            <div><dt className="text-sm text-ink/50">WhatsApp</dt><dd className="font-mono text-lg">{contact.whatsapp.display}</dd></div>
+            {/* <div><dt className="text-sm text-ink/50">WhatsApp</dt><dd className="font-mono text-lg">{contact.whatsapp.display}</dd></div> */}
             <div><dt className="text-sm text-ink/50">E-mail</dt><dd className="font-mono text-lg"><a href={`mailto:${contact.email}`} className="hover:text-principal">{contact.email}</a></dd></div>
           </dl>
           <a href={contact.whatsapp.url} target="_blank" rel="noopener noreferrer" className="mt-8 inline-block border border-ink px-6 py-3.5 font-medium transition-colors hover:bg-ink hover:text-paper">Falar pelo WhatsApp</a>

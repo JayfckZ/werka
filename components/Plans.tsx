@@ -15,28 +15,83 @@ export default function Plans() {
 
         <Reveal>
           <ol className="mt-16 grid border-t border-ink lg:grid-cols-3">
-            {plans.map((p) => (
-              <li key={p.n} className="flex flex-col border-b border-line py-10 lg:border-b-0 lg:border-l lg:px-8 lg:first:border-l-0 lg:first:pl-0">
-                <p className="font-mono text-xs text-ink/40">{p.n}</p>
-                <h3 className="mt-4 text-2xl font-semibold md:text-3xl">{p.t}</h3>
-                <p className="mt-2 text-ink/60">{p.para}</p>
-                <ul className="mt-8 space-y-3 text-sm">
-                  {p.items.map((i) => (
-                    <li key={i} className="flex gap-3">
-                      <span aria-hidden className="font-mono text-principal">—</span>
-                      <span>{i}</span>
-                    </li>
-                  ))}
-                </ul>
-                <div className="mt-auto pt-10">
-                  <p className="font-mono text-xs uppercase text-ink/50">Investimento</p>
-                  <p className="mt-1 font-mono text-lg">{p.price ?? "Sob consulta"}</p>
-                  <PlanLink plan={p.t} className="mt-6 inline-block border-b border-ink pb-0.5 font-medium transition-colors hover:border-principal hover:text-principal">
-                    Pedir orçamento <span aria-hidden>→</span>
-                  </PlanLink>
-                </div>
-              </li>
-            ))}
+            {plans.map((p) => {
+              const hl = !!p.highlight;
+              const muted = hl ? "text-paper/60" : "text-ink/60";
+              const faint = hl ? "text-paper/50" : "text-ink/50";
+
+              // Numera as notas na ordem em que aparecem nos itens (1, 2, 3...).
+              const notes: string[] = [];
+              const items = p.items.map((it) =>
+                typeof it === "string" ? { t: it, n: 0 } : { t: it.t, n: notes.push(it.note) }
+              );
+
+              return (
+                <li
+                  key={p.n}
+                  className={`flex flex-col border-b py-10 lg:border-b-0 lg:border-l lg:px-8 ${
+                    hl
+                      ? "-mx-5 border-transparent bg-ink px-5 text-paper md:-mx-8 md:px-8 lg:mx-0"
+                      : "border-line lg:first:border-l-0 lg:first:pl-0"
+                  }`}
+                >
+                  <p className={`flex items-center font-mono text-xs ${hl ? "text-paper/50" : "text-ink/40"}`}>
+                    {p.n}
+                    {p.tag && (
+                      <span className={`ml-3 border px-2 py-0.5 uppercase ${hl ? "border-paper/40 text-paper" : "border-ink/30 text-ink"}`}>{p.tag}</span>
+                    )}
+                  </p>
+                  <h3 className="mt-4 text-2xl font-semibold md:text-3xl">{p.t}</h3>
+                  <p className={`mt-2 ${muted}`}>{p.para}</p>
+
+                  <ul className="mt-8 space-y-3 text-sm">
+                    {items.map((i) => (
+                      <li key={i.t} className="flex gap-3">
+                        <span aria-hidden className={`font-mono ${hl ? "text-paper/50" : "text-principal"}`}>—</span>
+                        <span>
+                          {i.t}
+                          {i.n > 0 && <sup className={`ml-0.5 font-mono ${hl ? "text-paper" : "text-principal"}`}>{i.n}</sup>}
+                        </span>
+                      </li>
+                    ))}
+                  </ul>
+
+                  {notes.length > 0 && (
+                    <ul className={`mt-6 space-y-1 text-xs ${faint}`}>
+                      {notes.map((n, k) => (
+                        <li key={k}><sup className="mr-1 font-mono">{k + 1}</sup>{n}</li>
+                      ))}
+                    </ul>
+                  )}
+
+                  <div className="mt-auto pt-10">
+                    <div className={`border-t pt-6 ${hl ? "border-paper/20" : "border-line"}`}>
+                      <p className={`font-mono text-xs uppercase ${faint}`}>Investimento</p>
+                      {p.price ? (
+                        <p className="mt-2 flex flex-wrap items-baseline gap-x-2">
+                          {!p.priceExact && <span className={`font-mono text-xs uppercase ${faint}`}>a partir de</span>}
+                          <span className="text-4xl font-bold tracking-tight md:text-5xl">{p.price}</span>
+                          {p.priceUnit && <span className={`font-mono text-sm ${faint}`}>{p.priceUnit}</span>}
+                        </p>
+                      ) : (
+                        <p className="mt-2 text-3xl font-bold tracking-tight md:text-4xl">Sob consulta</p>
+                      )}
+
+                      {hl ? (
+                        <PlanLink plan={p.t} className="relative mt-6 inline-block bg-paper px-6 py-3.5 font-medium text-ink">
+                          Pedir orçamento <span aria-hidden>→</span>
+                          <span aria-hidden className="absolute inset-x-0 bottom-0 h-0.5 bg-principal" />
+                        </PlanLink>
+                      ) : (
+                        <PlanLink plan={p.t} className="mt-6 inline-block border-b border-ink pb-0.5 font-medium transition-colors hover:border-principal hover:text-principal">
+                          Pedir orçamento <span aria-hidden>→</span>
+                        </PlanLink>
+                      )}
+                    </div>
+                  </div>
+                </li>
+              );
+            })}
           </ol>
         </Reveal>
 

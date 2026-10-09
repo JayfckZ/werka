@@ -32,7 +32,7 @@ export default function ProjectCard({ p, flip }: { p: Project; flip?: boolean })
             </div>
           ))}
         </dl>
-        <p className="mt-8 font-mono text-xs text-white/40">{p.stack.join(" · ")}</p>
+        {p.stack && <p className="mt-8 font-mono text-xs text-white/40">{p.stack.join(" · ")}</p>}
       </div>
     </article>
   );

@@ -3,9 +3,9 @@ import { useEffect, useState, type FormEvent } from "react";
 import { plans } from "../data/site";
 
 const fields = [
-  { id: "name", label: "Nome", type: "text", ac: "name", req: true },
-  { id: "email", label: "E-mail", type: "email", ac: "email", req: true },
-  { id: "company", label: "Empresa", type: "text", ac: "organization", req: false, wide: true },
+  { id: "name", label: "Nome*", type: "text", ac: "name", req: true },
+  { id: "email", label: "E-mail*", type: "email", ac: "email", req: true },
+  { id: "company", label: "Empresa (opcional)", type: "text", ac: "organization", req: false, wide: true },
 ];
 const input = "w-full border-b border-ink/30 bg-transparent py-3 outline-none transition-colors focus:border-principal";
 const NOT_SURE = "Ainda não sei, quero conversar";
@@ -38,7 +38,7 @@ export default function ContactForm() {
         </div>
       ))}
       <div className="sm:col-span-2">
-        <label htmlFor="plan" className="font-mono text-xs uppercase text-ink/50">Plano de interesse</label>
+        <label htmlFor="plan" className="font-mono text-xs uppercase text-ink/50">Plano de interesse*</label>
         <div className="relative">
           <select id="plan" name="plan" required value={plan} onChange={(e) => setPlan(e.target.value)} className={`${input} appearance-none pr-8 ${plan ? "" : "text-ink/50"}`}>
             <option value="" disabled>Selecione um plano</option>
@@ -49,11 +49,11 @@ export default function ContactForm() {
         </div>
       </div>
       <div className="sm:col-span-2">
-        <label htmlFor="message" className="font-mono text-xs uppercase text-ink/50">Mensagem</label>
+        <label htmlFor="message" className="font-mono text-xs uppercase text-ink/50">Mensagem*</label>
         <textarea id="message" name="message" rows={4} required className={`${input} resize-none`} />
       </div>
       <div className="flex flex-wrap items-center gap-6 sm:col-span-2">
-        <button disabled={st === "sending"} className="relative bg-ink px-6 py-3.5 font-medium text-paper disabled:opacity-60">
+        <button disabled={st === "sending"} className="relative bg-ink px-6 py-3.5 font-medium text-paper disabled:opacity-40 cursor-pointer">
           {st === "sending" ? "Enviando..." : "Enviar mensagem"}<span aria-hidden className="absolute inset-x-0 bottom-0 h-0.5 bg-principal" />
         </button>
         <p role="status" aria-live="polite" className="text-sm text-ink/70">
